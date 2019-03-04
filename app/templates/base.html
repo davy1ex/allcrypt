@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+</head>
+<body>
+    <header>
+        <ul>
+            <a href="/">home</a>
+            <a href="/reg">sign_up</a>
+            <a href="/sign_in">sign_in</a>
+            <a href="/logout">logout</a>
+        </ul>
+    </header>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
