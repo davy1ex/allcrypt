@@ -6,4 +6,4 @@ class Configuration(object):
     SECRET_KEY = "RANDOM_KEY"
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(os.getcwd(), 'app/')
+    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(os.getcwd(), "app/main.db")

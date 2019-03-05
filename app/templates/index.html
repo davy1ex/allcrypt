@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
-    {% block title %}
+{% block title %}
         {% if title %}            
             home            
         {% endif %}
         | passkiper
-    {% endblock %}
-    {% block content %}    
-        hello, this is homepage
+{% endblock %}
+{% block content %}  
+    hello,
+    {% if current_user.username %}
+        {{ current_user.username }},
+    {% else %}
+        anonymous, 
+    {% endif %}
+    this is homepage
 {% endblock %}

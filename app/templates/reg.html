@@ -3,8 +3,12 @@
     
 <form action="" novalidate="" method="POST">
     <p>
-        {{ form.login.label }} <br>
-        {{ form.login() }}
+        {{ form.username.label }} <br>
+        {{ form.username() }}
+    </p>
+    <p>
+        {{ form.email.label }} <br>
+        {{ form.email }}
     </p>
     <p>
         {{ form.password.label }} <br>
@@ -14,7 +18,7 @@
         {{ form.password2.label }} <br>
         {{ form.password2() }}
     </p>
-    {{ form.submit() }}
+    {{ form.submit() }} <br>
 </form>
     
     
