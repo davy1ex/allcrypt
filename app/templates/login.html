@@ -1,25 +1,39 @@
 {% extends "base.html" %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href=" {{ url_for("static", filename="css/login.css") }} ">
+{% endblock %}
 {% block content %}
     <form method="POST" novalidate="" action="">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }} <br>
-            {{ form.username() }}
-        </p>
-        <p>
-            {{ form.password.label }} <br>
-            {{ form.password() }}        
-        </p>
-        {{ form.remember_me() }} {{ form.remember_me.label }}
-        <p>
-            {{ form.submit() }}
-        </p>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    {{ message }}
+        <div class="login_wrapper">
+            {{ form.hidden_tag() }} <!-- штука, без которой не проходит авторизация -->
+            <p>
+                {{ form.username.label }} <br>
+                {{ form.username() }}
+                <br>
+                {% for error in form.username.errors %}
+                    <span style="color: red"> {{ error }} </span>
                 {% endfor %}
-            {% endif %}
-        {% endwith %}
+            </p>
+            <p>
+                {{ form.password.label }} <br>
+                {{ form.password() }}
+                <br>
+                {% for error in form.password.errors %}
+                    <span style="color: red"> {{ error }} </span>
+                {% endfor %}
+            </p>
+            {{ form.remember_me() }} {{ form.remember_me.label }}
+            <p>
+                {{ form.submit() }}
+            </p>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+            
     </form>
 {% endblock %}

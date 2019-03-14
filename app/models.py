@@ -1,12 +1,8 @@
 # Сделать:
 #   -- реализовать миграции
 
-
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-
-from app.forms import RegistrationForm
 from app import db, login
 
 
@@ -17,9 +13,8 @@ def load_user(id):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(64), unique=True, index=True)
+    email = db.Column(db.String(120), unique=True, index=True)
     username = db.Column(db.String(64), unique=True, index=True)
-
     password_hash = db.Column(db.String(128))
     account = db.relationship("Account", backref="master", lazy="dynamic")
 
@@ -37,7 +32,8 @@ class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     login = db.Column(db.String(64), index=True)
-    password_hash = db.Column(db.String(120), index=True)
+    # password_hash = db.Column(db.String(120), index=True)
+    password = db.Column(db.String(120), index=True)
 
     def __repr__(self):
         return "<Account #{0}>".format(self.id)

@@ -1,0 +1,62 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+header {
+    background: #282923;
+    height: 40px;
+    min-width: 650px;
+}
+
+.head_wrapper {
+    width: 50%;
+    min-width: 650px;   
+    margin-left: auto;
+    margin-right: auto;
+}
+
+header a, a:visited {
+    text-decoration: none;
+    color: white /*white-theme*/
+    /*color: white;*/
+
+}
+
+header a:hover {
+    color: #BDBFC0;
+}
+
+header nav {
+    width: 100%;
+    padding-top: 10px;
+    display: inline-block;
+}
+
+header a {
+    font-weight: bold;
+    padding: 20px;
+}
+
+header .left_nav {
+    float: left;
+    margin-right: auto;
+}
+
+header .right_nav {
+    float: right;
+    margin-right: 10px;
+    height: 30px;
+    text-align: right;
+}
+
+.wrapper_content {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.flashed {
+    padding-top: 10px;
+    color: gray;
+}

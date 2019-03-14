@@ -1,16 +1,57 @@
-{% extends 'base.html' %}
-{% block title %}
-        {% if title %}            
-            home            
-        {% endif %}
-        | passkiper
+{% extends "base.html" %}
+{% block title %}          
+    home
 {% endblock %}
-{% block content %}  
-    hello,
-    {% if current_user.username %}
-        {{ current_user.username }},
-    {% else %}
-        anonymous, 
-    {% endif %}
-    this is homepage
+{% block css %}
+    <link rel="stylesheet" type="text/css" href=" {{ url_for("static", filename="css/index.css") }} ">
+{% endblock %}
+{% block content %}
+    <div class="content_wrapper">
+        hello,
+        {% if current_user.username %}
+            {{ current_user.username }}
+        {% else %}
+            anonymous
+        {% endif %}
+        <div class="content">
+            <div class="nav_content">
+                <nav>
+                    <div class="left_nav">
+                        <a href="/generate">Generate</a>
+                        <a href="/add">Add</a>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="body_content">
+                {% for account in accounts %}
+                    <form action="/delete_by_id">
+                        <p>
+                            <div class="index_content">
+                                <div class="block_data">
+                                    <span class=text>{{ account.login }}:{{ account.password }} {{ form.submit(value=account.id) }}<!-- <input type="submit" id={{ account.id }} value="x"> --></span>
+                                </div>     
+                            </div>    
+                        </p>
+                    </form>
+                        
+                    
+                {% endfor %}
+            </div>
+                
+
+            <div class="flashed">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}   
+             </div>
+        </div>
+            
+        
+    </div>
+        
 {% endblock %}
