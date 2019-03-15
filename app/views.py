@@ -1,10 +1,23 @@
 import random
+import string
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
-from app.forms import RegistrationForm, LoginForm, AddForm, IndexForm
+from app.forms import RegistrationForm, LoginForm, AddForm, IndexForm, GenPass
 from app.models import User, Account
+
+
+def generate_pass(numbers, length, letters=True):
+    password = ""
+    row = []
+    if letters:
+        row.append(string.ascii_letters)
+    if numbers:
+        row.append("0123456789")
+    for _ in range(int(length)):
+        password += random.choice(random.choice(row))
+    return password
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -29,7 +42,7 @@ def add():
     form = AddForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=current_user.username).first()
-        account = Account(login=form.login.data, password=form.login.data, master=user)
+        account = Account(login=form.login.data, password=form.password.data, master=user)
         db.session.add(account)
         db.session.commit()
 
@@ -69,6 +82,10 @@ def login():
         return redirect(url_for("index"))
     return render_template("login.html", form=form)
 
+@app.route("/settings")
+@login_required
+def settings():
+    return render_template("settings.html")
 
 @app.route("/logout")
 def logout():
@@ -76,7 +93,18 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/generate")
+@app.route("/generate", methods=["GET", "POST"])
 @login_required
 def generate():
-    return str(random.random())
+    form = GenPass()
+    if form.validate_on_submit():
+        text = ""
+        numbers = False
+        letters = False
+        if request.form.get("letters"):
+            letters = True
+        if request.form.get("numbers"):
+            numbers = True
+        length = form.input_field.data
+        flash(generate_pass(letters=letters, numbers=numbers, length=length))
+    return render_template("generate.html", form=form)

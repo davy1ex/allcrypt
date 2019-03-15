@@ -31,7 +31,7 @@ class LoginForm(FlaskForm):
 
 
 class GenPass(FlaskForm):
-    input_field = StringField("What you want?", validators=[DataRequired()])
+    input_field = StringField("Length", validators=[DataRequired()])
 
 
 class AddForm(FlaskForm):
