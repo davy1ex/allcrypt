@@ -7,14 +7,17 @@
     <form action="" method="POST" novalidate="">
         {{ form.hidden_tag() }}
         <p>
-            {{ form.login.label }}
-            <br>
+            {{ form.login.label }} <br>
             {{ form.login(size=20) }}
         </p>
 
         <p>
-            {{ form.password.label }}
-            <br>
+            {{ form.key.label }} <br>
+            {{ form.key(size=20) }}
+        </p>
+
+        <p>
+            {{ form.password.label }} <br>
             {{ form.password(size=20) }}
         </p>
         <br>

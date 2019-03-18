@@ -6,11 +6,12 @@ from app.models import User
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
+    username = StringField("Username", validators=[DataRequired()])
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    password2 = PasswordField("Repeat Password", validators=[DataRequired(), EqualTo("password")])
+    key = PasswordField("Key", validators=[DataRequired()])
+    submit = SubmitField("Register")
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
@@ -37,8 +38,11 @@ class GenPass(FlaskForm):
 class AddForm(FlaskForm):
     login = StringField("login", validators=[DataRequired()])
     password = PasswordField("password", validators=[DataRequired()])
+    key = PasswordField("Please, enter your key", validators=[DataRequired()])
     submit = SubmitField("add")
 
 
 class IndexForm(FlaskForm):
-    submit = SubmitField("x")
+    key = PasswordField("key")
+    show = SubmitField("show all")
+    delete = SubmitField("x")

@@ -7,6 +7,7 @@
 {% endblock %}
 {% block content %}
     <div class="content_wrapper">
+        ONE KEY, MANY PASSWORDS <br>
         hello,
         {% if current_user.username %}
             {{ current_user.username }}
@@ -14,31 +15,48 @@
             anonymous
         {% endif %}
         <div class="content">
+            <form action="" method="POST">
             <div class="nav_content">
                 <nav>
                     <div class="left_nav">
-                        <a href="/generate">Generate</a>
-                        <a href="/add">Add</a>
+                            {{ form.hidden_tag() }}
+                            <a href="/generate">Generate</a>
+                            <a href="/add">Add</a>
+                            {{ form.show() }} {{ form.key(size=10, placeholder="input your key") }}
                     </div>
                 </nav>
             </div>
 
             <div class="body_content">
-                {% for account in accounts %}
-                    <form action="/delete_by_id">
-                        <p>
-                            <div class="index_content">
-                                <div class="block_data">
-                                    <span class=text>{{ account.login }}:{{ account.password }} {{ form.submit(value=account.id) }}<!-- <input type="submit" id={{ account.id }} value="x"> --></span>
-                                </div>     
-                            </div>    
-                        </p>
-                    </form>
+                {% if decrypted_passwords %}
+                    {% for i in range(accounts.count()) %}
+                        <div class="index_content">
+                            <div class="block_data">
+                                <p>
+                                    {{ accounts.all()[i].login }}:{{ decrypted_passwords[i] }}
+                                </p>
+                            </div>
+                            
+                        </div>
                         
-                    
-                {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    {% for account in accounts.all() %}
+                        
+                            {{ form.hidden_tag() }}
+                            <p>
+                                <div class="index_content">
+                                    <div class="block_data">
+                                        <span class=text>{{ account.login }}:******** {{ form.delete(value=account.id) }}</span>
+                                    </div>     
+                                </div>    
+                            </p>
+                        
+                    {% endfor %}
+                        
+                {% endif %}
             </div>
-                
+            </form>       
 
             <div class="flashed">
                 {% with messages = get_flashed_messages() %}
