@@ -1,3 +1,6 @@
+# Сделать:
+# -- добавить символы (_*:^!@) для генерация пароля
+
 import random
 import string # для халявного словаря латинских симолов
 from flask import render_template, redirect, url_for, flash, request
@@ -65,12 +68,17 @@ def index():
     form = IndexForm()
     accounts = Account.query.filter_by(master=current_user)
     if form.validate_on_submit():
-        if current_user.check_key(form.key.data):
-            decrypted_passwords = [AESCrypt(form.key.data).decrypt(account.password) for account in accounts.all()]
-            return render_template("index.html", title="home", form=form, accounts=accounts, decrypted_passwords=decrypted_passwords)
+        # else:
+        #     return request.form["hide"]
+        if request.form["submit"] == "show/hide all":
+            if form.key.data == "":
+                return redirect(url_for("index"))
+            else:
+                if current_user.check_key(form.key.data):
+                    decrypted_passwords = [AESCrypt(form.key.data).decrypt(account.password) for account in accounts.all()]
+                    return render_template("index.html", title="home", form=form, accounts=accounts, decrypted_passwords=decrypted_passwords)
         else:
-            return request.form["delete"]
-            db.session.delete(Account.query.filter_by(id=request.form["delete"]).first())
+            db.session.delete(Account.query.filter_by(id=request.form["submit"]).first())
             db.session.commit()
     return render_template("index.html", title="home", form=form, accounts=accounts)
 

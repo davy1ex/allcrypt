@@ -44,5 +44,6 @@ class AddForm(FlaskForm):
 
 class IndexForm(FlaskForm):
     key = PasswordField("key")
-    show = SubmitField("show all")
-    delete = SubmitField("x")
+    submit = SubmitField("show/hide all")
+    submit = SubmitField("delete")
+    # submit = SubmitField("hide")
