@@ -8,7 +8,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from flask_mail import Message
 
 from app import app, db, mail
-from app.forms import RegistrationForm, LoginForm, AddForm, IndexForm, GenPass, SettingsForm, ResetPassword
+from app.forms import RegistrationForm, LoginForm, AddForm, IndexForm, GenPassForm, ChangePasswordForm, ResetPasswordForm
 from app.models import User, Account
 
 from aes import AESCrypt # Модуль по шифрации с форума
@@ -101,44 +101,61 @@ def add():
     return render_template("add.html", form=form)
 
 
-# страница с настройками (Тёмная тема ис каминг)
-@app.route("/settings", methods=["POST", "GET"])
-@login_required
+@app.route("/settings")
 def settings():
-    form = SettingsForm()
-    # if form.validate_on_submit():
-    #     if request.form["submit"] == "send code on mail":
-    #         with app.app_context():
-    #             mail.send(Message(str(current_user.generate_validate_code()), sender="ludmila89272671892@gmail.com", recipients=[current_user.email]))
-    #         flash("Check code on your email ({})".format(current_user.email))
-    #         return redirect("/settings")
-    #     elif request.form["submit"] == "reset":
-    #         if current_user.check_validate_code(form.code_field.data):
-    #             return redirect("/reset_password")
+    return redirect("/settings/change_password")
+
+
+# страница с настройками (Тёмная тема ис каминг)
+@app.route("/change_password", methods=["GET", "POST"])
+@app.route("/settings/change_password", methods=["POST", "GET"])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
     if form.validate_on_submit():
         current_user.set_password(form.password.data)
         db.session.commit()
         flash("success")
         return redirect(url_for("settings"))
-    return render_template("settings.html", form=form)
+    return render_template("settings/change_password.html", form=form)
+
+
+@app.route("/settings/change_email", methods=["GET", "POST"])
+def change_email():
+    return "42"
 
 
 @app.route("/reset_password", methods=["GET", "POST"])
-@login_required
 def reset_password():
-    form = ResetPassword()
+    form = ResetPasswordForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        # if user is not None:
-        user.set_password(form.password.data)
-        db.session.commit()
-        return redirect(url_for("login"))
-    return render_template("reset_password.html", form=form)
+        if request.form["submit"] == "send code":
+            user = User.query.filter_by(email=form.email.data).first()
+            if user is not None:
+                with app.app_context():
+                    mail.send(Message(str(user.generate_validate_code()), sender="ludmila89272671892@gmail.com", recipients=[user.email]))
+                    db.session.commit()
+                    flash("Check your email")
+            else:
+                flash("Invalid email")
+
+        elif request.form["submit"] == "submit":
+            user = User.query.filter_by(username=form.username.data).first()
+            if user is not None:
+                if user.check_validate_code(form.code.data):
+                    login_user(user, remember=False)
+                    return redirect("/change_password")
+                else:
+                    flash("Invalid code")
+            else:
+                flash("Invalid username")
+        return redirect("/reset_password")
+    return render_template("reset_password/reset_password.html", form=form)
 
 
 @app.route("/generate", methods=["GET", "POST"])
 def generate():
-    form = GenPass()
+    form = GenPassForm()
     if form.validate_on_submit():
         text = ""
         numbers = False

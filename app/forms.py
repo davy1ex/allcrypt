@@ -6,11 +6,11 @@ from app.models import User
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField("username", validators=[DataRequired()])
-    email = StringField("email", validators=[DataRequired(), Email()])
-    password = PasswordField("password", validators=[DataRequired()])
-    password2 = PasswordField("repeat password", validators=[DataRequired(), EqualTo("password")])
-    key = PasswordField("key", validators=[DataRequired()])
+    username = StringField("Username", validators=[DataRequired()])
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    password2 = PasswordField("Repeat password", validators=[DataRequired(), EqualTo("password")])
+    key = PasswordField("Key", validators=[DataRequired()])
     submit = SubmitField("register")
 
     def validate_username(self, username):
@@ -25,42 +25,38 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    username = StringField("username", validators=[DataRequired()])
-    password = PasswordField("password", validators=[DataRequired()])
-    remember_me = BooleanField("remember me")
+    username = StringField("Username", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    remember_me = BooleanField("Remember me")
     submit = SubmitField("sign in")
 
 
-class GenPass(FlaskForm):
-    input_field = StringField("length", validators=[DataRequired()])
+class GenPassForm(FlaskForm):
+    input_field = StringField("Length", validators=[DataRequired()])
 
 
 class AddForm(FlaskForm):
     login = StringField("login", validators=[DataRequired()])
-    password = PasswordField("password", validators=[DataRequired()])
-    key = PasswordField("please, enter your key", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    key = PasswordField("Please, enter your key", validators=[DataRequired()])
     submit = SubmitField("add")
 
 
 class IndexForm(FlaskForm):
-    key = PasswordField("key")
+    key = PasswordField("Key")
     submit = SubmitField("show/hide all")
     submit = SubmitField("delete")
 
 
-class SettingsForm(FlaskForm):
-    submit = SubmitField("reset password")
-    code_field = StringField("Code")
-    submit = SubmitField("Ok")
-
-
-class ResetPassword(FlaskForm):
-    username = StringField("current username", validators=[DataRequired()])
-    password = PasswordField("password", validators=[DataRequired()])
-    password2 = PasswordField("repeat password", validators=[DataRequired(), EqualTo("password")])
+class ChangePasswordForm(FlaskForm):
+    # username = StringField("current username", validators=[DataRequired()])
+    password = PasswordField("Your new password", validators=[DataRequired()])
+    password2 = PasswordField("Repeat password", validators=[DataRequired(), EqualTo("password")])
     submit = SubmitField("reset")
 
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user is None:
-            raise ValidationError("username is not found")
+
+class ResetPasswordForm(FlaskForm):
+    username = StringField("Username")
+    email = StringField("Email")
+    code = StringField("Your code")
+    submit = SubmitField()

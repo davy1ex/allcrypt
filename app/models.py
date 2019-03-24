@@ -20,7 +20,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     key_hash = db.Column(db.String(64))
     is_validated = db.Column(db.Boolean, default=False, index=True)
-    validate_code = db.Column(db.Integer)
+    validate_code = db.Column(db.Integer, index=True)
     time_to_validate = db.Column(db.DateTime())
     account = db.relationship("Account", backref="master", lazy="dynamic")
 
@@ -46,6 +46,7 @@ class User(db.Model, UserMixin):
         return self.validate_code
 
     def check_validate_code(self, validate_code):
+        print(self.email, self.username, self.validate_code)
         return str(validate_code) == str(self.validate_code)
 
 

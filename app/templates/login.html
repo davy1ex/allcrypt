@@ -7,17 +7,20 @@
         <div class="login_wrapper">
             {{ form.hidden_tag() }} <!-- штука, без которой не проходит авторизация -->
             <p>
-                {{ form.username.label }} <br>
-                {{ form.username() }}
+                {{ form.username.label }}
+            </p>
+            <p> {{ form.username() }}
                 <br>
                 {% for error in form.username.errors %}
                     <span style="color: red"> {{ error }} </span>
                 {% endfor %}
             </p>
             <p>
-                {{ form.password.label }} <a href="/restore_password">forgot password?</a> <br>
+                {{ form.password.label }} <a href="/reset_password">Forget password?</a> 
+            </p>
+            <p>
                 {{ form.password() }}
-                <br>
+                
                 {% for error in form.password.errors %}
                     <span style="color: red"> {{ error }} </span>
                 {% endfor %}

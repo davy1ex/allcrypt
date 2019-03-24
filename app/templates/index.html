@@ -30,18 +30,18 @@
                         </div>
                     </nav>
                 </div>
-
-                <div class="body_content">
+                
+                <!-- <div class="body_content"> -->
                     {% if decrypted_passwords %}
                         {% for i in range(accounts.count()) %}
-                            <div class="index_content">
+                            <!-- <div class="index_content"> -->
                                 <div class="block_data">
                                     <p>
                                         {{ accounts.all()[i].login }}:{{ decrypted_passwords[i] }} {{ form.submit(value=accounts.all()[i].id) }}
                                     </p>
                                 </div>
                                 
-                            </div>
+                            <!-- </div> -->
                             
                         {% endfor %}
                     {% else %}
@@ -59,7 +59,7 @@
                         {% endfor %}
                             
                     {% endif %}
-                </div>
+                <!-- </div> -->
             </form>       
 
             <div class="flashed">
