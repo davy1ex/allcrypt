@@ -1,6 +1,8 @@
 # Сделать:
 #   -- реализовать миграции
 
+from datetime import datetime, timedelta
+from random import randint
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login
@@ -17,6 +19,9 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     key_hash = db.Column(db.String(64))
+    is_validated = db.Column(db.Boolean, default=False, index=True)
+    validate_code = db.Column(db.Integer)
+    time_to_validate = db.Column(db.DateTime())
     account = db.relationship("Account", backref="master", lazy="dynamic")
 
     def __repr__(self):
@@ -34,10 +39,19 @@ class User(db.Model, UserMixin):
     def check_key(self, key):
         return check_password_hash(self.key_hash, key)
 
+    def generate_validate_code(self):
+        self.validate_code = randint(100000, 999999)
+        self.time_to_validate = datetime.now() + timedelta(minutes=5)
+
+        return self.validate_code
+
+    def check_validate_code(self, validate_code):
+        return str(validate_code) == str(self.validate_code)
+
 
 class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))       
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     login = db.Column(db.String(64), index=True)
     # password_hash = db.Column(db.String(120), index=True)
     password = db.Column(db.String(120), index=True)

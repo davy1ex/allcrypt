@@ -5,9 +5,10 @@ import random
 import string # для халявного словаря латинских симолов
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
+from flask_mail import Message
 
-from app import app, db
-from app.forms import RegistrationForm, LoginForm, AddForm, IndexForm, GenPass
+from app import app, db, mail
+from app.forms import RegistrationForm, LoginForm, AddForm, IndexForm, GenPass, SettingsForm, ResetPassword
 from app.models import User, Account
 
 from aes import AESCrypt # Модуль по шифрации с форума
@@ -35,7 +36,7 @@ def reg():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data, email=form.email.data).first()
         if user is None:
-            user = User(username=form.username.data)
+            user = User(username=form.username.data, email=form.email.data)
             user.set_password(form.password.data)
             user.set_key(form.key.data)
             db.session.add(user)
@@ -81,15 +82,7 @@ def index():
             db.session.delete(Account.query.filter_by(id=request.form["submit"]).first())
             db.session.commit()
     return render_template("index.html", title="home", form=form, accounts=accounts)
-
-
-# НЁХ
-@app.route("/parser", methods=["GET", "POST"])
-@login_required
-def parser():
-    pass
-    # return redirect(url_for("index"))            
-
+      
 
 # добавляет новые записи
 @app.route("/add", methods=["GET", "POST"])
@@ -109,10 +102,38 @@ def add():
 
 
 # страница с настройками (Тёмная тема ис каминг)
-@app.route("/settings")
+@app.route("/settings", methods=["POST", "GET"])
 @login_required
 def settings():
-    return render_template("settings.html")
+    form = SettingsForm()
+    # if form.validate_on_submit():
+    #     if request.form["submit"] == "send code on mail":
+    #         with app.app_context():
+    #             mail.send(Message(str(current_user.generate_validate_code()), sender="ludmila89272671892@gmail.com", recipients=[current_user.email]))
+    #         flash("Check code on your email ({})".format(current_user.email))
+    #         return redirect("/settings")
+    #     elif request.form["submit"] == "reset":
+    #         if current_user.check_validate_code(form.code_field.data):
+    #             return redirect("/reset_password")
+    if form.validate_on_submit():
+        current_user.set_password(form.password.data)
+        db.session.commit()
+        flash("success")
+        return redirect(url_for("settings"))
+    return render_template("settings.html", form=form)
+
+
+@app.route("/reset_password", methods=["GET", "POST"])
+@login_required
+def reset_password():
+    form = ResetPassword()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        # if user is not None:
+        user.set_password(form.password.data)
+        db.session.commit()
+        return redirect(url_for("login"))
+    return render_template("reset_password.html", form=form)
 
 
 @app.route("/generate", methods=["GET", "POST"])

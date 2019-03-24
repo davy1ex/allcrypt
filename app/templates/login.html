@@ -15,14 +15,14 @@
                 {% endfor %}
             </p>
             <p>
-                {{ form.password.label }} <br>
+                {{ form.password.label }} <a href="/restore_password">forgot password?</a> <br>
                 {{ form.password() }}
                 <br>
                 {% for error in form.password.errors %}
                     <span style="color: red"> {{ error }} </span>
                 {% endfor %}
             </p>
-            {{ form.remember_me() }} {{ form.remember_me.label }}
+                {{ form.remember_me() }} {{ form.remember_me.label }}
             <p>
                 {{ form.submit() }}
             </p>

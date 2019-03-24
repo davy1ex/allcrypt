@@ -1,0 +1,32 @@
+.nav_content {
+    border-bottom: solid 1px #555652;
+    min-height: 40px;
+}
+
+
+.nav_content a {
+    color: black;
+}
+
+.nav_content {
+    line-height: 40px;
+}
+
+.nav_content a:visited {
+    color: black;
+}
+
+.nav_content a:hover {
+    color: #555652;
+}
+
+.nav_content .left_nav {
+    float: left;
+    padding-left: 10px;
+}
+
+.content {
+    background: #eeeeee;
+    border: solid 1px white;
+    outline: solid 1px #555652;
+}
