@@ -1,25 +1,28 @@
-{% extends "base.html" %}
+{% extends "index/base.html" %}
 
-{% block content %}
-    <form action="" method="POST">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.input_field(value=8) }}
-        </p>
-        <p>
-            <input type="checkbox" name="numbers" checked> 0123... <br>
-            <input type="checkbox" name="letters" checked> abcd... <br>
-        </p>
-        <input type="submit" value="generate">    
-    </form>
+{% block index_content %}
+    <div class="wrapper_form">
+            <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.input_field(value=8) }}
+            </p>
+            <p>
+                <input type="checkbox" name="numbers" checked> 0123... <br>
+                <input type="checkbox" name="letters" checked> abcd... <br>
+            </p>
+            <input type="submit" value="generate">    
+        </form>
+        
+        <div class="flashed">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}   
+        </div>    
+    </div>
     
-    <div class="flashed">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            {% endif %}
-        {% endwith %}   
-     </div>
 {% endblock %}

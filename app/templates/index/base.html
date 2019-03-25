@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href=" {{ url_for("static", filename="css/index.css") }} ">
+{% endblock %}
+{% block content %}
+    <div class="index_wrapper">
+        <div class="content">
+            <div class="nav_content">
+                <nav>
+                    <div class="left_nav">
+                            <a href="/">All</a>
+                            <a href="/index/generate">Generate</a>
+                            <a href="/index/add">Add</a>
+                    </div>              
+
+                    
+                    <div class="right_nav">
+                        <form action="" method="POST">
+                            {% block right_nav %}
+                            {% endblock %}
+                        </form>
+                    </div>
+                    
+                        
+                </nav>
+            </div>
+            <form action="" method="POST">
+                {% block index_content %}
+                {% endblock %}
+            </form> 
+        </div>
+        
+    </div>
+
+{% endblock %}

@@ -2,27 +2,32 @@
 
 {% block settings %}
     <div class="settings">
-        <form action="" method="POST">
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.submit(value="send code") }}    
-            </p>
-            <p>
-                {{ form.code.label }} <br>
-                {{ form.code() }} <br>
-                {{ form.submit(value="validate" )}}    
-            </p>
-             <div class="flashed">
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        {% for message in messages %}
-                            {{ message }}
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}   
-             </div>
-            
-        </form>        
+        {% if not current_user.is_validated %}
+            Your email is not confirmed. Fix it. Otherwise, you will not be able to change your password.
+            <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.submit(value="send code") }}    
+                </p>
+                <p>
+                    {{ form.code.label }} <br>
+                    {{ form.code() }} <br>
+                    {{ form.submit(value="validate" )}}    
+                </p>
+                 <div class="flashed">
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}   
+                 </div>
+                
+            </form>        
+        {% else %}
+            Your email is confirmed
+        {% endif %}
     </div>
 
 {% endblock %}

@@ -69,23 +69,21 @@ def index():
     form = IndexForm()
     accounts = Account.query.filter_by(master=current_user)
     if form.validate_on_submit():
-        # else:
-        #     return request.form["hide"]
         if request.form["submit"] == "show/hide all":
             if form.key.data == "":
                 return redirect(url_for("index"))
             else:
                 if current_user.check_key(form.key.data):
                     decrypted_passwords = [AESCrypt(form.key.data).decrypt(account.password) for account in accounts.all()]
-                    return render_template("index.html", title="home", form=form, accounts=accounts, decrypted_passwords=decrypted_passwords)
+                    return render_template("index/index.html", title="home", form=form, accounts=accounts, decrypted_passwords=decrypted_passwords)
         else:
             db.session.delete(Account.query.filter_by(id=request.form["submit"]).first())
             db.session.commit()
     return render_template("index/index.html", title="home", form=form, accounts=accounts)
-      
+
 
 # добавляет новые записи
-@app.route("/add", methods=["GET", "POST"])
+@app.route("/index/add", methods=["GET", "POST"])
 @login_required
 def add():
     form = AddForm()
@@ -97,8 +95,30 @@ def add():
             db.session.commit()
 
             flash("Writed")
-            return redirect(url_for("index"))
-    return render_template("add.html", form=form)
+
+        else:
+            flash("Key incorrect")
+            return redirect("/index/add")
+        return redirect("/")
+    return render_template("index/add.html", form=form)
+
+
+@app.route("/index/generate", methods=["GET", "POST"])
+def generate():
+    form = GenPassForm()
+    if form.validate_on_submit():
+        numbers = False
+        letters = False
+        if request.form.get("letters"):
+            letters = True
+        if request.form.get("numbers"):
+            numbers = True
+        elif not request.form.get("letter") and not request.form.get("numbers"):
+            flash("You must select at least one checkbox.")
+            return redirect("/index/generate")
+        length = form.input_field.data
+        flash(generate_pass(letters=letters, numbers=numbers, length=length))
+    return render_template("index/generate.html", form=form)
 
 
 @app.route("/settings")
@@ -164,22 +184,6 @@ def reset_password():
                 flash("Invalid username")
         return redirect("/reset_password")
     return render_template("reset_password/reset_password.html", form=form)
-
-
-@app.route("/generate", methods=["GET", "POST"])
-def generate():
-    form = GenPassForm()
-    if form.validate_on_submit():
-        text = ""
-        numbers = False
-        letters = False
-        if request.form.get("letters"):
-            letters = True
-        if request.form.get("numbers"):
-            numbers = True
-        length = form.input_field.data
-        flash(generate_pass(letters=letters, numbers=numbers, length=length))
-    return render_template("generate.html", form=form)
 
 
 # страница "выйти"

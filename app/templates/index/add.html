@@ -1,26 +1,39 @@
-{% extends "base.html" %}
-{% block css %}
-    <link rel="stylesheet" type="text/css" href=" {{ url_for("static", filename="css/login.css") }} ">
-{% endblock %}
+{% extends "index/base.html" %}
 
-{% block content %}
-    <form action="" method="POST" novalidate="">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.login.label }} <br>
-            {{ form.login(size=20) }}
-        </p>
+{% block index_content %}
+    
+    <div class="wrapper_form">
+        <form action="" method="POST" novalidate="">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.login.label }} <br>
+                {{ form.login(size=20) }}
+            </p>
+
+            <p>
+                {{ form.key.label }} <br>
+                {{ form.key(size=20) }}
+            </p>
+
+            <p>
+                {{ form.password.label }} <br>
+                {{ form.password(size=20) }}
+            </p>
+            {{ form.submit() }}
+        </form> 
 
         <p>
-            {{ form.key.label }} <br>
-            {{ form.key(size=20) }}
+            <div class="flashed">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}   
+             </div>            
         </p>
+               
+    </div>
 
-        <p>
-            {{ form.password.label }} <br>
-            {{ form.password(size=20) }}
-        </p>
-        <br>
-        {{ form.submit() }}
-    </form>    
 {% endblock %}
