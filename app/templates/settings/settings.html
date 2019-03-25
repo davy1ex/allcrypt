@@ -1,0 +1,13 @@
+{% extends "settings/base.html" %}
+
+{% block settings %}
+    <div class="settings">
+        status: 
+        {% if current_user.is_validated %}
+            validated
+        {% else %}
+            not validated
+        {% endif %}
+    </div>
+        
+{% endblock %}

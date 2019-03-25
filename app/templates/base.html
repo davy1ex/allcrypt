@@ -18,7 +18,7 @@
                 </div>
                 <div class="right_nav">
                         {% if not current_user.is_anonymous %}
-                            <a href="/settings/change_password">Settings</a>
+                            <a href="/settings">Settings</a>
                             <a href="{{ url_for("logout") }}">Logout</a>
                         {% else %}
                             <a href="{{ url_for("login") }}">Sign in</a>

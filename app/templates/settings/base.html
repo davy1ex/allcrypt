@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/settings.css") }}">
+{% endblock %}
+
+{% block content %}
+    <div class="settings_wrapper">
+        <div class="content">
+            <div class="nav_content">
+                <nav>
+                    <div class="left_nav">
+                            <a href="/settings">Main</a>
+                            <a href="/settings/change_email">Change email</a>
+                            <a href="/settings/change_password">Change password</a>
+                    </div>
+                </nav>
+            </div>
+            {% block settings %}
+            {% endblock %}
+        </div>
+    </div>
+
+{% endblock %}

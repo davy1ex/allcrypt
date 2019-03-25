@@ -1,4 +1,4 @@
-.content_wrapper {
+.settings_wrapper {
     padding-top: 10px;
     width: 90%;
     margin-left: auto;
@@ -42,6 +42,7 @@
 
 .settings {
     padding-left: 10px;
+    padding-top: 10px;
     width: 90%;
     text-align: left;
 }

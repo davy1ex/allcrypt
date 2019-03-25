@@ -81,7 +81,7 @@ def index():
         else:
             db.session.delete(Account.query.filter_by(id=request.form["submit"]).first())
             db.session.commit()
-    return render_template("index.html", title="home", form=form, accounts=accounts)
+    return render_template("index/index.html", title="home", form=form, accounts=accounts)
       
 
 # добавляет новые записи
@@ -103,7 +103,9 @@ def add():
 
 @app.route("/settings")
 def settings():
-    return redirect("/settings/change_password")
+
+    return render_template("settings/settings.html")
+    # return redirect("/settings/change_password")
 
 
 # страница с настройками (Тёмная тема ис каминг)
