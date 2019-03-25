@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.submit(value="send code") }}    
+        </p>
+        <p>
+            {{ form.code.label }} <br>
+            {{ form.code() }} <br>
+            {{ form.submit(value="validate" )}}    
+        </p>
+         <div class="flashed">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}   
+         </div>
+        
+    </form>
+    
+{% endblock %}

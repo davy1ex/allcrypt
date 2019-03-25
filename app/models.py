@@ -49,6 +49,9 @@ class User(db.Model, UserMixin):
         print(self.email, self.username, self.validate_code)
         return str(validate_code) == str(self.validate_code)
 
+    def validate(self):
+        self.is_validated = True
+
 
 class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True)

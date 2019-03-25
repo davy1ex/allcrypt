@@ -8,7 +8,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from flask_mail import Message
 
 from app import app, db, mail
-from app.forms import RegistrationForm, LoginForm, AddForm, IndexForm, GenPassForm, ChangePasswordForm, ResetPasswordForm
+from app.forms import RegistrationForm, LoginForm, AddForm, IndexForm, GenPassForm, ChangePasswordForm, ResetPasswordForm, ChangeEmailForm
 from app.models import User, Account
 
 from aes import AESCrypt # Модуль по шифрации с форума
@@ -122,7 +122,18 @@ def change_password():
 
 @app.route("/settings/change_email", methods=["GET", "POST"])
 def change_email():
-    return "42"
+    form = ChangeEmailForm()
+    if form.validate_on_submit():
+        if request.form["submit"] == "send code":
+            mail.send(Message(str(current_user.generate_validate_code()), sender="ludmila89272671892@gmail.com", recipients=[current_user.email]))
+            db.session.commit()
+            flash("Check your email")
+        elif request.form["submit"] == "validate":
+            current_user.validate()
+            db.session.commit()
+            flash("Your account was validated")
+            # return redirect("settings/change_email")
+    return render_template("settings/change_email.html", form = form)
 
 
 @app.route("/reset_password", methods=["GET", "POST"])

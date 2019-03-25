@@ -60,3 +60,7 @@ class ResetPasswordForm(FlaskForm):
     email = StringField("Email")
     code = StringField("Your code")
     submit = SubmitField()
+
+class ChangeEmailForm(FlaskForm):
+    code = StringField("Code")
+    submit = SubmitField("Submit")
