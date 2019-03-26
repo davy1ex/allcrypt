@@ -7,17 +7,17 @@
             {{ form.hidden_tag() }}
             <p>
                 {{ form.login.label }} <br>
-                {{ form.login(size=20) }}
+                {{ form.login(size=25) }}
             </p>
 
             <p>
                 {{ form.key.label }} <br>
-                {{ form.key(size=20) }}
+                {{ form.key(size=25) }}
             </p>
 
             <p>
                 {{ form.password.label }} <br>
-                {{ form.password(size=20) }}
+                {{ form.password(size=25) }}
             </p>
             {{ form.submit() }}
         </form> 
@@ -33,7 +33,7 @@
                 {% endwith %}   
              </div>            
         </p>
-               
+
     </div>
 
 {% endblock %}

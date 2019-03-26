@@ -1,42 +1,55 @@
 {% extends "base.html" %}
+
 {% block css %}
     <link rel="stylesheet" type="text/css" href=" {{ url_for("static", filename="css/login.css") }} ">
 {% endblock %}
+
 {% block content %}
-    <form method="POST" novalidate="" action="">
         <div class="login_wrapper">
-            {{ form.hidden_tag() }} <!-- штука, без которой не проходит авторизация -->
-            <p>
-                {{ form.username.label }}
-            </p>
-            <p> {{ form.username() }}
-                <br>
-                {% for error in form.username.errors %}
-                    <span style="color: red"> {{ error }} </span>
-                {% endfor %}
-            </p>
-            <p>
-                {{ form.password.label }} <a href="/reset_password">Forget password?</a> 
-            </p>
-            <p>
-                {{ form.password() }}
-                
-                {% for error in form.password.errors %}
-                    <span style="color: red"> {{ error }} </span>
-                {% endfor %}
-            </p>
-                {{ form.remember_me() }} {{ form.remember_me.label }}
-            <p>
-                {{ form.submit() }}
-            </p>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
-            
-    </form>
+            <div class="content">
+                <form method="POST" novalidate="" action="">
+                    {{ form.hidden_tag() }} <!-- штука, без которой не проходит авторизация -->
+                    <p>
+                        <div class="label">
+                            {{ form.username.label }}                            
+                        </div>
+                        {{ form.username(size=25) }}
+                        {% for error in form.username.errors %}
+                            <span style="color: red"> {{ error }} </span>
+                        {% endfor %}
+                    </p>
+                    
+                    <p>
+                        <div class="label">
+                            {{ form.password.label }} <div class="forgot"><a href="/reset_password">Forgot password?</a> </div>    
+                        </div>
+                        {{ form.password(size=25) }}
+                        
+                        {% for error in form.password.errors %}
+                            <span style="color: red"> {{ error }} </span>
+                        {% endfor %}
+                    </p>
+                    
+                    <p>
+                        <div class="remember_me">
+                            {{ form.remember_me() }} {{ form.remember_me.label }}
+                        </div>                        
+                    </p>
+
+                    <p>
+                        <div class="button">
+                            {{ form.submit() }}
+                        </div>
+                    </p>
+
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </form>                
+            </div>
+        </div>            
 {% endblock %}

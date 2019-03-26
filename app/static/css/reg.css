@@ -4,7 +4,7 @@
     
 }
 
-.login_wrapper {
+.reg_wrapper {
     width: 40%;
     text-align: left;
     margin-left: auto;
@@ -15,15 +15,9 @@
     outline: solid 1px #555652;
 }
 
-.login_wrapper a, .login_wrapper a:visited {
-    color: #024795;;
-    text-decoration: none;
+input[type="text"], input[type="password"] {
+    width: 95%;
 }
-
-/*.nav_content {
-    border-bottom: solid 1px #555652;
-}
-*/
 
 .label:not(:first-of-type) {
     padding-top: 20px;
@@ -33,24 +27,10 @@
     padding-bottom: 5px;
 }
 
-.forgot {
-    float: right;
-}
-
-input[type="text"], input[type="password"] {
-    width: 95%;
-}
-
-.remember_me {
-    padding-top: 5px;
-}
-
 input[type="submit"] {
     width: 100%;
 }
 
 .button {
-    padding-top: 5px;
+    padding-top: 10px;
 }
-
-

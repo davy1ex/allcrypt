@@ -41,7 +41,6 @@ def reg():
             user.set_key(form.key.data)
             db.session.add(user)
             db.session.commit()
-        flash("Теперь ты наш")
         return redirect(url_for("login"))
     return render_template("reg.html", form=form)
 
