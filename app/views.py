@@ -8,7 +8,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from flask_mail import Message
 
 from app import app, db, mail
-from app.forms import RegistrationForm, LoginForm, AddForm, IndexForm, GenPassForm, ChangePasswordForm, ResetPasswordForm, ChangeEmailForm
+from app.forms import RegistrationForm, LoginForm, AddForm, IndexForm, GenPassForm, ChangePasswordForm, ResetPasswordForm, SettingsEmailForm, SettingsKeyForm, SettingsForm
 from app.models import User, Account
 
 from aes import AESCrypt # Модуль по шифрации с форума
@@ -120,16 +120,21 @@ def generate():
     return render_template("index/generate.html", form=form)
 
 
-@app.route("/settings")
+@app.route("/settings", methods=["GET", "POST"])
 def settings():
-
-    return render_template("settings/settings.html")
-    # return redirect("/settings/change_password")
+    form = SettingsForm()
+    if form.validate_on_submit():
+        if request.form["submit"] == "clear all accounts":
+            db.session.query(Account).filter_by(master=current_user).delete()
+            db.session.commit()
+            flash("All accounts deleted")
+            return redirect("/settings")
+    return render_template("settings/settings.html", form=form)
 
 
 # страница с настройками (Тёмная тема ис каминг)
 @app.route("/change_password", methods=["GET", "POST"])
-@app.route("/settings/change_password", methods=["POST", "GET"])
+@app.route("/settings/password", methods=["POST", "GET"])
 @login_required
 def change_password():
     form = ChangePasswordForm()
@@ -138,12 +143,13 @@ def change_password():
         db.session.commit()
         flash("success")
         return redirect(url_for("settings"))
-    return render_template("settings/change_password.html", form=form)
+    return render_template("settings/password.html", form=form)
 
 
-@app.route("/settings/change_email", methods=["GET", "POST"])
-def change_email():
-    form = ChangeEmailForm()
+@app.route("/settings/email", methods=["GET", "POST"])
+@login_required
+def settings_email():
+    form = SettingsEmailForm()
     if form.validate_on_submit():
         if request.form["submit"] == "send code":
             mail.send(Message(str(current_user.generate_validate_code()), sender="ludmila89272671892@gmail.com", recipients=[current_user.email]))
@@ -153,8 +159,27 @@ def change_email():
             current_user.validate()
             db.session.commit()
             flash("Your account was validated")
-            # return redirect("settings/change_email")
-    return render_template("settings/change_email.html", form = form)
+
+        elif request.form["submit"] == "change":
+            if form.email.data != "":
+                current_user.change_email(form.email.data)
+                db.session.commit()
+                flash("Successfully")
+            else:
+                flash("You must input email")
+    return render_template("settings/email.html", form=form)
+
+
+@app.route("/settings/key", methods=["GET", "POST"])
+@login_required
+def settings_key():
+    form = SettingsKeyForm()
+    if form.validate_on_submit():
+        if request.form["submit"] == "change" and form.key.data != "":
+            current_user.set_key(form.key.data)
+            db.session.commit()
+            flash("Successfully")
+    return render_template("settings/key.html", form=form)
 
 
 @app.route("/reset_password", methods=["GET", "POST"])

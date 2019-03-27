@@ -1,0 +1,22 @@
+{% extends "settings/base.html" %}
+
+{% block settings %}
+    <div class="settings">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.key.label }}
+            {{ form.key() }}
+            {{ form.submit(value="change") }}
+        </form>
+
+         <div class="flashed">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}   
+         </div>
+    </div>
+{% endblock %}

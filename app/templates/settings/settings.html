@@ -2,12 +2,27 @@
 
 {% block settings %}
     <div class="settings">
-        status: 
+        your status: 
         {% if current_user.is_validated %}
             validated
         {% else %}
             not validated
         {% endif %}
+        <div class="clear_all">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.submit(value="clear all accounts") }}
+            </form>
+        </div>
+        <div class="flashed">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}   
+        </div>
     </div>
         
 {% endblock %}

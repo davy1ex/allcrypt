@@ -48,6 +48,10 @@ class IndexForm(FlaskForm):
     submit = SubmitField("delete")
 
 
+class SettingsForm(FlaskForm):
+    submit = SubmitField("")
+
+
 class ChangePasswordForm(FlaskForm):
     # username = StringField("current username", validators=[DataRequired()])
     password = PasswordField("Your new password", validators=[DataRequired()])
@@ -61,6 +65,11 @@ class ResetPasswordForm(FlaskForm):
     code = StringField("Your code")
     submit = SubmitField()
 
-class ChangeEmailForm(FlaskForm):
+class SettingsEmailForm(FlaskForm):
+    email = StringField("Email", validators=[Email()])
     code = StringField("Code")
+    submit = SubmitField("Submit")
+
+class SettingsKeyForm(FlaskForm):
+    key = PasswordField("New key")
     submit = SubmitField("Submit")

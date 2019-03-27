@@ -18,6 +18,9 @@
                 </div>
                 <div class="right_nav">
                         {% if not current_user.is_anonymous %}
+                            <div class="topmenu">
+                                {{ current_user.username }}
+                            </div>
                             <a href="/settings">Settings</a>
                             <a href="{{ url_for("logout") }}">Logout</a>
                         {% else %}

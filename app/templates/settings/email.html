@@ -1,0 +1,51 @@
+{% extends "settings/base.html" %}
+
+{% block settings %}
+    <div class="settings">
+        Current email: {{ current_user.email }} <br>
+        {% if not current_user.is_validated %}
+            Your email is not confirmed. Fix it. Otherwise, you will not be able to change your password.
+            <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.submit(value="send code") }}    
+                </p>
+                <p>
+                    {{ form.code.label }} <br>
+                    {{ form.code() }} <br>
+                    {% for error in form.code.errors %}
+                        <span style="color: red"> {{ error }} </span>
+                    {% endfor %}
+                    {{ form.submit(value="validate" )}}    
+                </p>                
+            </form>        
+        {% else %}
+            Your email is confirmed
+        {% endif %}
+
+        <div class="change_email">
+            <form method="POST">
+                <h3>Change email</h3>
+                {{ form.hidden_tag() }}
+                {{ form.email.label }}
+                {{ form.email() }} 
+                {{ form.submit(value="change")}} <br>
+                {% for error in form.email.errors %}
+                    <span style="color: red"> {{ error }} </span>
+                {% endfor %}
+            </form>
+        </div>
+
+        <div class="flashed">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}   
+         </div>
+
+    </div>
+
+{% endblock %}

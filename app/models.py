@@ -52,6 +52,9 @@ class User(db.Model, UserMixin):
     def validate(self):
         self.is_validated = True
 
+    def change_email(self, new_email):
+        self.email = new_email
+
 
 class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True)
