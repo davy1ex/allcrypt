@@ -82,6 +82,7 @@ header .right_nav {
 }
 
 .flashed {
-    /*padding-top: 10px;*/
+    word-wrap: break-word;
+    width: 100%; 
     color: gray;
 }

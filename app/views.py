@@ -14,14 +14,17 @@ from app.models import User, Account
 from aes import AESCrypt # Модуль по шифрации с форума
 
 
-def generate_pass(numbers, length, letters=True):
+def generate_pass(numbers, symbols, length, letters=True):
     """ генерация пароля заданной длины из запрашиваемых сиволов """
+    symbols_line = "!@#$%^&*()/+_-?,."
     password = ""
     row = []
     if letters:
         row.append(string.ascii_letters)
     if numbers:
         row.append("0123456789")
+    if symbols:
+        row.append(symbols_line)
     for _ in range(int(length)):
         password += random.choice(random.choice(row))
     return password
@@ -92,9 +95,7 @@ def add():
             account = Account(login=form.login.data, password=AESCrypt(key).encrypt(form.password.data), master=current_user)
             db.session.add(account)
             db.session.commit()
-
             flash("Writed")
-
         else:
             flash("Key incorrect")
             return redirect("/index/add")
@@ -107,16 +108,19 @@ def generate():
     form = GenPassForm()
     if form.validate_on_submit():
         numbers = False
-        letters = False
+        # letters = False
+        symbols = False
         if request.form.get("letters"):
             letters = True
         if request.form.get("numbers"):
             numbers = True
+        if request.form.get("symbols"):
+            symbols = True
         elif not request.form.get("letter") and not request.form.get("numbers"):
             flash("You must select at least one checkbox.")
             return redirect("/index/generate")
         length = form.input_field.data
-        flash(generate_pass(letters=letters, numbers=numbers, length=length))
+        flash(generate_pass(letters=letters, numbers=numbers, symbols=symbols, length=length))
     return render_template("index/generate.html", form=form)
 
 
