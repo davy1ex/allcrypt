@@ -69,7 +69,8 @@ def login():
 @login_required
 def index():
     form = IndexForm()
-    accounts = Account.query.filter_by(master=current_user)
+    accounts = Account
+    accounts_type = ["email", "social", "games", "work", "other"]
     if form.validate_on_submit():
         if request.form["submit"] == "show/hide all":
             if form.key.data == "":
@@ -77,11 +78,11 @@ def index():
             else:
                 if current_user.check_key(form.key.data):
                     decrypted_passwords = [AESCrypt(form.key.data).decrypt(account.password) for account in accounts.all()]
-                    return render_template("index/index.html", title="home", form=form, accounts=accounts, decrypted_passwords=decrypted_passwords)
+                    return render_template("index/index.html", title="home", form=form, accounts=accounts, decrypted_passwords=decrypted_passwords, accounts_type=accounts_type)
         else:
             db.session.delete(Account.query.filter_by(id=request.form["submit"]).first())
             db.session.commit()
-    return render_template("index/index.html", title="home", form=form, accounts=accounts)
+    return render_template("index/index.html", title="home", form=form, accounts=accounts, accounts_type=accounts_type)
 
 
 # добавляет новые записи
@@ -92,7 +93,7 @@ def add():
     if form.validate_on_submit():
         key = form.key.data
         if current_user.check_key(key):
-            account = Account(login=form.login.data, password=AESCrypt(key).encrypt(form.password.data), master=current_user)
+            account = Account(login=form.login.data, password=AESCrypt(key).encrypt(form.password.data), master=current_user, account_type=request.form.get("account_type"))
             db.session.add(account)
             db.session.commit()
             flash("Writed")

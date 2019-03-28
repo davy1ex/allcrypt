@@ -60,7 +60,7 @@ class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     login = db.Column(db.String(64), index=True)
-    # password_hash = db.Column(db.String(120), index=True)
+    account_type = db.Column(db.String(64), index=True)
     password = db.Column(db.String(120), index=True)
 
     def __repr__(self):

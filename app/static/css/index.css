@@ -14,12 +14,15 @@
 
 .nav_content {
     border-bottom: solid 1px #555652;
-    min-height: 40px;
+    height: 40px;
+    /*max-height: 90px;*/
+    /*min-height: 50px;*/
 }
 
 
 .nav_content a {
     color: black;
+    font-size: 1em;
 }
 
 .nav_content {
@@ -40,8 +43,10 @@
 }
 
 .nav_content .right_nav {
-    /*width: 70%;*/
-    float: right;
+    width: 50%;
+    text-align: right;
+    /*float: right;*/
+    margin-left: auto;
     padding-right: 10px;
 }
 
@@ -71,3 +76,12 @@
 .block_data input[type="password"] {
     line-height: 52px;
 }
+
+.list_box {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/*input[type="submit"], input[type="password"], input[type="text"] {
+    width: 95%;
+}*/

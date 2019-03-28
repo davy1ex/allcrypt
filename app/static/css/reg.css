@@ -16,7 +16,7 @@
 }
 
 input[type="text"], input[type="password"] {
-    width: 95%;
+    width: 90%;
 }
 
 .label:not(:first-of-type) {

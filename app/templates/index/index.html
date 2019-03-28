@@ -15,27 +15,16 @@
 
 {% block index_content %}
     <div class="wrapper_form">
-        {% if decrypted_passwords %}
-                {% for i in range(accounts.count()) %}
-                    <!-- <div class="index_content"> -->
-                        <div class="block_data">
-                            <p>
-                                {{ accounts.all()[i].login }}:{{ decrypted_passwords[i] }} {{ form.submit(value=accounts.all()[i].id) }}
-                            </p>
-                        </div>            
+            {% if decrypted_passwords %}
+                {% for type in accounts_type %}                    
+                    <strong>{{ type }}</strong>
+                    <hr>
+                    {% for account in accounts.query.filter_by(master=current_user, account_type=type).all() %}               
+                        {{ account.login }}
+                    {% endfor %}
+                    <br>
                 {% endfor %}
-            
-            {% else %}
-                {% for account in accounts.all() %}            
-                    {{ form.hidden_tag() }}
-                    <p>
-                        <div class="index_content">
-                            <div class="block_data">
-                                <span class=text>{{ account.login }}:******** {{ form.submit(value=account.id) }}</span>
-                            </div>     
-                        </div>    
-                    </p>            
-                {% endfor %}
+                
                     
             {% endif %}  
 

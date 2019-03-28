@@ -45,10 +45,14 @@
     text-align: left;
 }
 
-.clear_all {
+.clear_all,  .submit, .reset {
+    padding-top: 5px;
+}
+
+.code, .change_email {
     padding-top: 10px;
 }
 
-.change_email {
-    padding-top: 10px;
+input[type="text"], input[type="password"] {
+    width: 95%;
 }
