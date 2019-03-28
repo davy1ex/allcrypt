@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, index=True)
     username = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-    key_hash = db.Column(db.String(64))
+    key_hash = db.Column(db.String(128))
     is_validated = db.Column(db.Boolean, default=False, index=True)
     validate_code = db.Column(db.Integer, index=True)
     time_to_validate = db.Column(db.DateTime())
@@ -52,6 +52,9 @@ class User(db.Model, UserMixin):
     def validate(self):
         self.is_validated = True
 
+    def devalidate(self):
+        self.is_validated = False
+
     def change_email(self, new_email):
         self.email = new_email
 
@@ -61,7 +64,7 @@ class Account(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     login = db.Column(db.String(64), index=True)
     account_type = db.Column(db.String(64), index=True)
-    password = db.Column(db.String(120), index=True)
+    password = db.Column(db.String(128), index=True)
 
     def __repr__(self):
         return "<Account #{0}>".format(self.id)

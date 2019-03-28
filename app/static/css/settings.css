@@ -41,8 +41,24 @@
 
 .settings {
     padding: 10px;
-    width: 90%;
+    /*width: 95%;*/
+    margin-left: auto;
+    margin-right: auto;
     text-align: left;
+}
+
+.settings a {
+    color: black;
+}
+
+.validate_email, .change_email {
+    /*width: 60%;*/
+    /*margin-left: auto;*/
+    margin-right: auto;
+}
+
+.validate_email input[type="text"], .change_email input[type="text"] {
+    width: 40%;
 }
 
 .clear_all,  .submit, .reset {
@@ -54,5 +70,5 @@
 }
 
 input[type="text"], input[type="password"] {
-    width: 95%;
+    width: 98%;
 }

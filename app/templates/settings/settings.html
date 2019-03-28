@@ -2,11 +2,11 @@
 
 {% block settings %}
     <div class="settings">
-        your status: 
+        Your status: 
         {% if current_user.is_validated %}
-            validated
+            <strong>validated</strong>
         {% else %}
-            not validated
+            <strong>not validated</strong>. <a href="/settings/email">Confirm it</a>
         {% endif %}
         <div class="clear_all">
             <form method="POST">

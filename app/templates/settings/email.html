@@ -4,30 +4,33 @@
     <div class="settings">
         Current email: {{ current_user.email }} <br>
         {% if not current_user.is_validated %}
-            Your email is not confirmed. Fix it. Otherwise, you will not be able to change your password.
-            <form action="" method="POST">
-                {{ form.hidden_tag() }}
-                <p>
-                    <div class="submit">
-                        {{ form.submit(value="send code") }}    
-                    </div>                        
-                </p>
-                <p>
-                    <div class="code">
-                        {{ form.code.label }} <br>
-                        {{ form.code() }} 
+            <div class="validate_email">
+                Your email <strong>is not confirmed</strong>. Fix it. Otherwise, you will not be able to change your password.
+                <form action="" method="POST">
+                    {{ form.hidden_tag() }}
+                    <p>
                         <div class="submit">
-                            {{ form.submit(value="validate" )}}    
-                        </div>
-                        <br>
-                        {% for error in form.code.errors %}
-                            <span style="color: red"> {{ error }} </span>
-                        {% endfor %}
-                    </div>                    
-                </p>                
-            </form>        
+                            {{ form.submit(value="send code") }}    
+                        </div>                        
+                    </p>
+                    <p>
+                        <div class="code">
+                            {{ form.code.label }} <br>
+                            {{ form.code() }} 
+                            <div class="submit">
+                                {{ form.submit(value="validate" )}}    
+                            </div>
+                            <br>
+                            {% for error in form.code.errors %}
+                                <span style="color: red"> {{ error }} </span>
+                            {% endfor %}
+                        </div>                    
+                    </p>                
+                </form>            
+            </div>
+            
         {% else %}
-            Your email is confirmed
+            Your email <strong>is confirmed</strong>
         {% endif %}
 
         <div class="change_email">

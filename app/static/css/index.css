@@ -20,7 +20,7 @@
 }
 
 
-.nav_content a {
+.nav_content, .block_data a {
     color: black;
     font-size: 1em;
 }
@@ -80,6 +80,22 @@
 .list_box {
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.block_data {
+    margin-bottom: 10px;
+}
+
+.type {
+    font-size: 1.5em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    border-bottom: solid 1px gray;
+}
+
+.text:not(:last-child) {
+    border-bottom: solid 1px lightgray;
 }
 
 /*input[type="submit"], input[type="password"], input[type="text"] {

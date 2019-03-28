@@ -4,29 +4,51 @@
 {% block right_nav %}
     {{ form.hidden_tag() }}
     {{ form.submit(value="show/hide all") }} {{ form.key(size=10, placeholder="input your key")}}
-    <!-- блок создания приветствия -->
-        <!-- hello, -->
-    <!-- {% if current_user.username %}
-        {{ current_user.username }}
-    {% else %}
-        anonymous
-    {% endif %} -->
 {% endblock %}
 
 {% block index_content %}
     <div class="wrapper_form">
             {% if decrypted_passwords %}
-                {% for type in accounts_type %}                    
-                    <strong>{{ type }}</strong>
-                    <hr>
-                    {% for account in accounts.query.filter_by(master=current_user, account_type=type).all() %}               
-                        {{ account.login }}
-                    {% endfor %}
-                    <br>
+                {% for account_type in account_types %}
+                    <div class="block_data">
+                        <div class="type">
+                            {{ account_type }}
+                        </div>
+                        {% if accounts.query.filter_by(master=current_user, account_type=account_type).all()|length != 0 %}
+                            {% for i in range(accounts.query.filter_by(master=current_user, account_type=account_type).count()) %}
+                                <form metod="POST">
+                                    {{ form.hidden_tag() }}
+                                    <div class="text">
+                                        <!-- логин:пароль кнопка для удаления -->
+                                            {{ accounts.query.filter_by(master=current_user, account_type=account_type)[i].login }}:{{ decrypted_passwords[account_types.index(account_type)][account_type][i]}} {{ form.submit(value=accounts.query.filter_by(master=current_user, account_type=account_type)[i].id)  }}
+                                    </div> 
+                                </form>
+                            {% endfor %}
+                        {% elif accounts.query.filter_by(master=current_user, account_type=account_type).all()|length == 0 %}
+                            <div class="text"><a href="/index/add">Add account</a></div>
+                        {% endif %}
+                    </div>
                 {% endfor %}
-                
-                    
-            {% endif %}  
+            {% else %}
+                {% for account_type in account_types %}
+                    <div class="block_data">
+                        <div class="type">
+                            {{ account_type }}
+                        </div>
+                        {% if accounts.query.filter_by(master=current_user, account_type=account_type).all()|length != 0 %}
+                            <form method="POST">
+                                {{ form.hidden_tag() }}
+                                {% for account in accounts.query.filter_by(master=current_user, account_type=account_type).all() %}
+                                    <div class="text">{{ account.login }}:******{{ form.submit(value=account.id) }}</div>
+                                {% endfor %}
+                            </form>
+                        {% elif accounts.query.filter_by(master=current_user, account_type=account_type).all()|length == 0 %}
+                            <div class="text"><a href="/index/add">Add account</a></div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+            {% endif %}
 
             <div class="flashed">
                 {% with messages = get_flashed_messages() %}

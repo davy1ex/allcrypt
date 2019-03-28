@@ -57,7 +57,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash("Oops... You're password/login incorrect")
+            flash("Oops... Your password/login incorrect.")
             return redirect("/login")
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for("index"))
@@ -69,20 +69,30 @@ def login():
 @login_required
 def index():
     form = IndexForm()
-    accounts = Account
-    accounts_type = ["email", "social", "games", "work", "other"]
+    accounts = []
+    account_types = ["Email", "Social", "Games", "Work", "Other"]
+    decrypted_passwords = []  # список, который будет содержать упорядоченный по типу аккаунта пароли
     if form.validate_on_submit():
         if request.form["submit"] == "show/hide all":
             if form.key.data == "":
                 return redirect(url_for("index"))
             else:
                 if current_user.check_key(form.key.data):
-                    decrypted_passwords = [AESCrypt(form.key.data).decrypt(account.password) for account in accounts.all()]
-                    return render_template("index/index.html", title="home", form=form, accounts=accounts, decrypted_passwords=decrypted_passwords, accounts_type=accounts_type)
+                    # список дешифрованных паролей. AESCryptУ нужен ключ, дальше метод decrypt() возвращает дешифрованный пароль
+                    # decrypted_passwords = [AESCrypt(form.key.data).decrypt(account.password) for account in accounts.all()]
+
+                    # создание двух списков - аккаунтов и дешифрованных паролей, упорядоченных по порядку типов
+                    for account_type in account_types:
+                        decrypted_passwords.append({account_type: []})
+                        for account in Account.query.filter_by(master=current_user, account_type=account_type).all():
+                            decrypted_passwords[account_types.index(account_type)][account_type].append(AESCrypt(form.key.data).decrypt(account.password))
+                            accounts.append(account)
+                    print(decrypted_passwords)
+                    return render_template("index/index.html", title="home", form=form, accounts=Account, decrypted_passwords=decrypted_passwords, account_types=account_types)
         else:
             db.session.delete(Account.query.filter_by(id=request.form["submit"]).first())
             db.session.commit()
-    return render_template("index/index.html", title="home", form=form, accounts=accounts, accounts_type=accounts_type)
+    return render_template("index/index.html", title="home", form=form, accounts=Account, account_types=account_types)
 
 
 # добавляет новые записи
@@ -96,9 +106,9 @@ def add():
             account = Account(login=form.login.data, password=AESCrypt(key).encrypt(form.password.data), master=current_user, account_type=request.form.get("account_type"))
             db.session.add(account)
             db.session.commit()
-            flash("Writed")
+            flash("Writed.")
         else:
-            flash("Key incorrect")
+            flash("Key incorrect.")
             return redirect("/index/add")
         return redirect("/")
     return render_template("index/add.html", form=form)
@@ -132,7 +142,7 @@ def settings():
         if request.form["submit"] == "clear all accounts":
             db.session.query(Account).filter_by(master=current_user).delete()
             db.session.commit()
-            flash("All accounts deleted")
+            flash("All accounts deleted.")
             return redirect("/settings")
     return render_template("settings/settings.html", form=form)
 
@@ -146,7 +156,7 @@ def change_password():
     if form.validate_on_submit():
         current_user.set_password(form.password.data)
         db.session.commit()
-        flash("success")
+        flash("Success.")
         return redirect(url_for("settings"))
     return render_template("settings/password.html", form=form)
 
@@ -159,19 +169,20 @@ def settings_email():
         if request.form["submit"] == "send code":
             mail.send(Message(str(current_user.generate_validate_code()), sender="ludmila89272671892@gmail.com", recipients=[current_user.email]))
             db.session.commit()
-            flash("Check your email")
+            flash("Check your email.")
         elif request.form["submit"] == "validate":
             current_user.validate()
             db.session.commit()
-            flash("Your account was validated")
+            flash("Your account was validated.")
 
         elif request.form["submit"] == "change":
-            if form.email.data != "":
+            if form.email.data != "" and "@" in form.email.data and "." in form.email.data:
                 current_user.change_email(form.email.data)
+                current_user.devalidate()
                 db.session.commit()
-                flash("Successfully")
+                flash("Successfully. Please confirm the new mail.")
             else:
-                flash("You must input email")
+                flash("You must input email.")
     return render_template("settings/email.html", form=form)
 
 
@@ -183,7 +194,7 @@ def settings_key():
         if request.form["submit"] == "change" and form.key.data != "":
             current_user.set_key(form.key.data)
             db.session.commit()
-            flash("Successfully")
+            flash("Successfully.")
     return render_template("settings/key.html", form=form)
 
 
@@ -197,9 +208,9 @@ def reset_password():
                 with app.app_context():
                     mail.send(Message(str(user.generate_validate_code()), sender="ludmila89272671892@gmail.com", recipients=[user.email]))
                     db.session.commit()
-                    flash("Check your email")
+                    flash("Check your email.")
             else:
-                flash("Invalid email")
+                flash("Invalid email.")
 
         elif request.form["submit"] == "submit":
             user = User.query.filter_by(username=form.username.data).first()
@@ -208,9 +219,9 @@ def reset_password():
                     login_user(user, remember=False)
                     return redirect("/change_password")
                 else:
-                    flash("Invalid code")
+                    flash("Invalid code.")
             else:
-                flash("Invalid username")
+                flash("Invalid username.")
         return redirect("/reset_password")
     return render_template("reset_password/reset_password.html", form=form)
 
