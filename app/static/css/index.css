@@ -20,7 +20,7 @@
 }
 
 
-.nav_content, .block_data a {
+.nav_content a, .block_data a {
     color: black;
     font-size: 1em;
 }
