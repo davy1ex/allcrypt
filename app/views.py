@@ -2,6 +2,7 @@
 # -- добавить символы (_*:^!@) для генерация пароля
 
 import random
+from datetime import datetime
 import string # для халявного словаря латинских симолов
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
@@ -11,7 +12,7 @@ from app import app, db, mail
 from app.forms import RegistrationForm, LoginForm, AddForm, IndexForm, GenPassForm, ChangePasswordForm, ResetPasswordForm, SettingsEmailForm, SettingsKeyForm, SettingsForm
 from app.models import User, Account
 
-from aes import AESCrypt # Модуль по шифрации с форума
+from aes import AESCrypt  # Модуль по шифрации с форума
 
 
 def generate_pass(numbers, symbols, length, letters=True):
@@ -171,9 +172,12 @@ def settings_email():
             db.session.commit()
             flash("Check your email.")
         elif request.form["submit"] == "validate":
-            current_user.validate()
-            db.session.commit()
-            flash("Your account was validated.")
+            if datetime.now() <= current_user.time_to_validate:
+                current_user.validate()
+                db.session.commit()
+                flash("Your account was validated.")
+            else:
+                flash("Validation code overdue.")
 
         elif request.form["submit"] == "change":
             if form.email.data != "" and "@" in form.email.data and "." in form.email.data:
@@ -215,9 +219,11 @@ def reset_password():
         elif request.form["submit"] == "submit":
             user = User.query.filter_by(username=form.username.data).first()
             if user is not None:
-                if user.check_validate_code(form.code.data):
+                if user.check_validate_code(form.code.data) and datetime.now() <= user.time_to_validate:
                     login_user(user, remember=False)
                     return redirect("/change_password")
+                elif datetime.now() > user.time_to_validate:
+                    flash("Validation code overdue.")
                 else:
                     flash("Invalid code.")
             else:
