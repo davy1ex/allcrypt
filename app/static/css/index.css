@@ -2,7 +2,6 @@
     width: 90%;
     margin-left: auto;
     margin-right: auto;
-    /*text-align: center;*/
 }
 
 .content {
@@ -15,8 +14,6 @@
 .nav_content {
     border-bottom: solid 1px #555652;
     height: 40px;
-    /*max-height: 90px;*/
-    /*min-height: 50px;*/
 }
 
 
@@ -45,7 +42,6 @@
 .nav_content .right_nav {
     width: 50%;
     text-align: right;
-    /*float: right;*/
     margin-left: auto;
     padding-right: 10px;
 }
@@ -54,8 +50,6 @@
     width: 98%;
     margin-left: auto;
     margin-right: auto;
-    /*padding-top: 10px;*/
-    /*text-align: left;*/
     background: white;
     border: solid 1px #d2d2d2; 
     line-height: 52px;
@@ -97,7 +91,3 @@
 .text:not(:last-child) {
     border-bottom: solid 1px lightgray;
 }
-
-/*input[type="submit"], input[type="password"], input[type="text"] {
-    width: 95%;
-}*/

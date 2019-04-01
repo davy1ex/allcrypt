@@ -18,9 +18,7 @@ header {
 
 header a, a:visited {
     text-decoration: none;
-    color: white /*white-theme*/
-    /*color: white;*/
-
+    color: white 
 }
 
 header a:hover {
@@ -50,7 +48,6 @@ header .right_nav {
     text-align: right;
 }
 
-
 .topmenu {
     color: #BDBFC0;
     list-style: none;
@@ -58,13 +55,11 @@ header .right_nav {
 
 .submenu {
     display: none;
-    /*list-style: none;*/
 }
 
 .topmenu li:hover .submenu {
     display: block;
     list-style: none;
-    /*padding-top: 10px;*/
     background: #eeeeee;
     border: solid 1px gray;
     text-align: left;

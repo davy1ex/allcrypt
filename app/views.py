@@ -237,3 +237,9 @@ def reset_password():
 def logout():
     logout_user()
     return redirect(url_for("index"))
+
+
+@app.route("/timer")
+@login_required
+def timer():
+    return render_template("test/timer.html", deadtime=datetime.strftime(current_user.time_to_validate, "%D %H:%M:%S"))

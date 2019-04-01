@@ -52,12 +52,10 @@
 }
 
 .validate_email, .change_email {
-    /*width: 60%;*/
-    /*margin-left: auto;*/
     margin-right: auto;
 }
 
-.validate_email input[type="text"], .change_email input[type="text"] {
+.validate_email input[type="text"], .change_email input[type="text"], .change_password input[type="password"], .change_key input[type="password"] {
     width: 40%;
 }
 
