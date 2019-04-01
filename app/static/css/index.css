@@ -67,6 +67,10 @@
     padding: 10px;
 }
 
+.wrapper_form input[type="text"], .wrapper_form input[type="password"] {
+    width: 40%;
+}
+
 .block_data input[type="password"] {
     line-height: 52px;
 }
@@ -90,4 +94,8 @@
 
 .text:not(:last-child) {
     border-bottom: solid 1px lightgray;
+}
+
+.flashed {
+    text-align: center;
 }

@@ -19,6 +19,19 @@
             </div>
             {% block settings %}
             {% endblock %}
+            <p>
+                <div class="flashed">
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <!-- <br> -->
+                            <hr>
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}   
+                 </div>
+            </p>
         </div>
     </div>
 

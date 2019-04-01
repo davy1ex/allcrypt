@@ -22,12 +22,16 @@ def generate_pass(numbers, symbols, length, letters=True):
     row = []
     if letters:
         row.append(string.ascii_letters)
+    
     if numbers:
         row.append("0123456789")
+    
     if symbols:
         row.append(symbols_line)
+    
     for _ in range(int(length)):
         password += random.choice(random.choice(row))
+    
     return password
 
 
@@ -39,13 +43,15 @@ def reg():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data, email=form.email.data).first()
+        
         if user is None:
             user = User(username=form.username.data, email=form.email.data)
             user.set_password(form.password.data)
             user.set_key(form.key.data)
             db.session.add(user)
             db.session.commit()
-        return redirect(url_for("login"))
+        
+        return redirect(url_for("login"))    
     return render_template("reg.html", form=form)
 
 
@@ -55,10 +61,12 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for("index"))
     form = LoginForm()
+    
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+        
         if user is None or not user.check_password(form.password.data):
-            flash("Oops... Your password/login incorrect.")
+            flash("Oops... Your password/login incorrect.")            
             return redirect("/login")
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for("index"))
@@ -74,9 +82,11 @@ def index():
     account_types = ["Email", "Social", "Games", "Work", "Other"]
     decrypted_passwords = []  # список, который будет содержать упорядоченный по типу аккаунта пароли
     if form.validate_on_submit():
+        
         if request.form["submit"] == "show/hide all":
             if form.key.data == "":
                 return redirect(url_for("index"))
+            
             else:
                 if current_user.check_key(form.key.data):
                     # список дешифрованных паролей. AESCryptУ нужен ключ, дальше метод decrypt() возвращает дешифрованный пароль
@@ -85,6 +95,7 @@ def index():
                     # создание двух списков - аккаунтов и дешифрованных паролей, упорядоченных по порядку типов
                     for account_type in account_types:
                         decrypted_passwords.append({account_type: []})
+                        
                         for account in Account.query.filter_by(master=current_user, account_type=account_type).all():
                             decrypted_passwords[account_types.index(account_type)][account_type].append(AESCrypt(form.key.data).decrypt(account.password))
                             accounts.append(account)
@@ -103,14 +114,17 @@ def add():
     form = AddForm()
     if form.validate_on_submit():
         key = form.key.data
+        
         if current_user.check_key(key):
             account = Account(login=form.login.data, password=AESCrypt(key).encrypt(form.password.data), master=current_user, account_type=request.form.get("account_type"))
             db.session.add(account)
             db.session.commit()
             flash("Writed.")
+        
         else:
             flash("Key incorrect.")
             return redirect("/index/add")
+        
         return redirect("/")
     return render_template("index/add.html", form=form)
 
@@ -122,15 +136,20 @@ def generate():
         numbers = False
         # letters = False
         symbols = False
+        
         if request.form.get("letters"):
             letters = True
+        
         if request.form.get("numbers"):
             numbers = True
+        
         if request.form.get("symbols"):
             symbols = True
+        
         elif not request.form.get("letter") and not request.form.get("numbers"):
             flash("You must select at least one checkbox.")
             return redirect("/index/generate")
+        
         length = form.input_field.data
         flash(generate_pass(letters=letters, numbers=numbers, symbols=symbols, length=length))
     return render_template("index/generate.html", form=form)
@@ -144,6 +163,7 @@ def settings():
             db.session.query(Account).filter_by(master=current_user).delete()
             db.session.commit()
             flash("All accounts deleted.")
+            
             return redirect("/settings")
     return render_template("settings/settings.html", form=form)
 
@@ -158,6 +178,7 @@ def change_password():
         current_user.set_password(form.password.data)
         db.session.commit()
         flash("Success.")
+        
         return redirect(url_for("settings"))
     return render_template("settings/password.html", form=form)
 
@@ -170,14 +191,15 @@ def settings_email():
         if request.form["submit"] == "send code":
             mail.send(Message(str(current_user.generate_validate_code()), sender="ludmila89272671892@gmail.com", recipients=[current_user.email]))
             db.session.commit()
-            flash("Check your email.")
+            flash("Check your email. (code valid for 5 minutes)")
+        
         elif request.form["submit"] == "validate":
-            if datetime.now() <= current_user.time_to_validate:
+            if datetime.now() <= current_user.time_to_validate and current_user.check_validate_code(form.code.data):
                 current_user.validate()
                 db.session.commit()
                 flash("Your account was validated.")
             else:
-                flash("Validation code overdue.")
+                flash("Invalid/overdue code.")
 
         elif request.form["submit"] == "change":
             if form.email.data != "" and "@" in form.email.data and "." in form.email.data:
@@ -185,6 +207,7 @@ def settings_email():
                 current_user.devalidate()
                 db.session.commit()
                 flash("Successfully. Please confirm the new mail.")
+            
             else:
                 flash("You must input email.")
     return render_template("settings/email.html", form=form)
@@ -208,11 +231,13 @@ def reset_password():
     if form.validate_on_submit():
         if request.form["submit"] == "send code":
             user = User.query.filter_by(email=form.email.data).first()
+            
             if user is not None:
                 with app.app_context():
                     mail.send(Message(str(user.generate_validate_code()), sender="ludmila89272671892@gmail.com", recipients=[user.email]))
                     db.session.commit()
                     flash("Check your email.")
+            
             else:
                 flash("Invalid email.")
 
@@ -222,8 +247,10 @@ def reset_password():
                 if user.check_validate_code(form.code.data) and datetime.now() <= user.time_to_validate:
                     login_user(user, remember=False)
                     return redirect("/change_password")
+                
                 elif datetime.now() > user.time_to_validate:
                     flash("Validation code overdue.")
+                
                 else:
                     flash("Invalid code.")
             else:
@@ -237,9 +264,3 @@ def reset_password():
 def logout():
     logout_user()
     return redirect(url_for("index"))
-
-
-@app.route("/timer")
-@login_required
-def timer():
-    return render_template("test/timer.html", deadtime=datetime.strftime(current_user.time_to_validate, "%D %H:%M:%S"))

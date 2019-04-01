@@ -30,10 +30,13 @@
             </div>
             
         {% else %}
-            Your email <strong>is confirmed</strong>
-        {% endif %}
+            <p>
+                Your email <strong>is confirmed</strong>
+            </p>
+        {% endif %}        
 
         <div class="change_email">
+            <hr>
             <form method="POST">
                 <h3>Change email</h3>
                 {{ form.hidden_tag() }}
@@ -42,22 +45,26 @@
                 <div class="submit">
                     {{ form.submit(value="change")}} 
                 </div>
-                <br>
-                {% for error in form.email.errors %}
-                    <span style="color: red"> {{ error }} </span>
-                {% endfor %}
+                
+                <!-- {% if form.email.errors|length > 0 %}
+                    <br>
+                    {% for error in form.email.errors %}
+                        <span style="color: red"> {{ error }} </span>
+                    {% endfor %}
+                {% endif %} -->
             </form>
         </div>
 
-        <div class="flashed">
+        <!-- <div class="flashed">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
+                    <hr>
                     {% for message in messages %}
                         {{ message }}
                     {% endfor %}
                 {% endif %}
             {% endwith %}   
-         </div>
+         </div> -->
 
     </div>
 
