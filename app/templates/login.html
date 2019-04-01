@@ -23,7 +23,9 @@
                         <div class="label">
                             {{ form.password.label }} <div class="forgot"><a href="/reset_password">Forgot password?</a> </div>    
                         </div>
-                        {{ form.password(size=25) }}
+                        <p>
+                            {{ form.password(size=25) }}
+                        </p>
                         
                         {% for error in form.password.errors %}
                             <span style="color: red"> {{ error }} </span>

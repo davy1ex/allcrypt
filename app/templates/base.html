@@ -17,21 +17,22 @@
                     <a href="{{ url_for("index") }}">Home</a>
                 </div>
                 <div class="right_nav">
-                        {% if not current_user.is_anonymous %}
-                            <ul class="topmenu">
-                                <li>
-                                    <a href="">{{ current_user.username }}</a>
-                                    <ul class="submenu">
-                                        <li><a href="/settings">Settings</a></li>
-                                        <li><a href="{{ url_for("logout") }}">Logout</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                            </div>
-                        {% else %}
-                            <a href="{{ url_for("login") }}">Sign in</a>
-                            <a href="{{ url_for("reg") }}">Sign up</a>
-                        {% endif %}
+                    {% if not current_user.is_anonymous %}
+                        <ul class="topmenu">
+                            <li>
+                                <a href="">{{ current_user.username }}</a>
+                                <ul class="submenu">
+                                    <li><a href="/settings">Settings</a></li>
+                                    <li><a href="{{ url_for("logout") }}">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    
+                    {% else %}
+                        <a href="{{ url_for("login") }}">Sign in</a>
+                        <a href="{{ url_for("reg") }}">Sign up</a>
+                    {% endif %}
+                
                 </div>
             </nav>
         </div>           
