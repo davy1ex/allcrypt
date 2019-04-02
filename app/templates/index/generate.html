@@ -7,23 +7,18 @@
             <p>
                 {{ form.input_field(value=8) }}
             </p>
+            
             <p>
                 <input type="checkbox" name="numbers" checked> e.g. 0123<br>
                 <input type="checkbox" name="letters" checked> e.g. abcd<br>
                 <input type="checkbox" name="symbols"> e.g. !@#$%<br>
             </p>
-            <input type="submit" value="generate">    
+            
+            <div class="submit">
+                <input type="submit" value="generate">    
+            </div>
+            
         </form>
-        
-        <!-- <div class="flashed">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}   
-        </div>  -->   
     </div>
     
 {% endblock %}

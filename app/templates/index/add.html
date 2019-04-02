@@ -1,5 +1,7 @@
 {% extends "index/base.html" %}
-
+{% block index_css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="css/add.css") }}">
+{% endblock %}
 {% block index_content %}
     
     <div class="wrapper_form">
@@ -30,23 +32,12 @@
                         <option>Other</option>
                     </select>    
                 </div>
-                
             </p>
-            {{ form.submit() }}
+
+            <div class="submit">
+                {{ form.submit() }}
+            </div>
         </form> 
-
-        <!-- <p>
-            <div class="flashed">
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        {% for message in messages %}
-                            {{ message }}
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}   
-             </div>            
-        </p> -->
-
     </div>
 
 {% endblock %}

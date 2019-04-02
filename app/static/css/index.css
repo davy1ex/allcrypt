@@ -22,6 +22,15 @@
     font-size: 1em;
 }
 
+.nav_content a {
+    font-size: 1.5em;
+    text-decoration: none;
+}
+
+.nav_content a:not(:first-child) {
+    padding-left: 10px;
+}
+
 .nav_content {
     line-height: 40px;
 }
@@ -37,6 +46,7 @@
 .nav_content .left_nav {
     float: left;
     padding-left: 10px;
+    line-height: 50px;
 }
 
 .nav_content .right_nav {
@@ -94,6 +104,10 @@
 
 .text:not(:last-child) {
     border-bottom: solid 1px lightgray;
+}
+
+.submit {
+    padding-top: 5px;
 }
 
 .flashed {
