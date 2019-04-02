@@ -1,5 +1,7 @@
 {% extends "index/base.html" %}
-
+{% block index_css %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="css/index/generate.css") }}">
+{% endblock %}
 {% block index_content %}
     <div class="wrapper_form">
             <form action="" method="POST">
