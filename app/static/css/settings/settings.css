@@ -1,6 +1,7 @@
 .settings_wrapper {
     padding-top: 10px;
-    width: 70%;
+    width: 40%;
+    min-width: 300px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -14,6 +15,8 @@
 .nav_content a {
     color: black;
     padding: 5px;
+    font-size: 1.5em;
+    text-decoration: none;
 }
 
 .nav_content {
@@ -29,8 +32,11 @@
 }
 
 .nav_content .left_nav {
-    float: left;
-    padding-left: 10px;
+    /*float: left;*/
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    /*padding-left: 10px;*/
 }
 
 .content {
@@ -41,7 +47,6 @@
 
 .settings {
     padding: 10px;
-    /*width: 95%;*/
     margin-left: auto;
     margin-right: auto;
     text-align: left;
@@ -56,7 +61,7 @@
 }
 
 .validate_email input[type="text"], .change_email input[type="text"], .change_password input[type="password"], .change_key input[type="password"] {
-    width: 40%;
+    width: 99%;
 }
 
 .clear_all,  .submit, .reset {
